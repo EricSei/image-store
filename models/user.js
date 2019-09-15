@@ -3,7 +3,8 @@ const bcrypt   = require('bcrypt-nodejs');
 
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, lowercase: true },
-  password: String
+  password: String,
+  image_filenames: [String]
 });
 
 userSchema.pre('save', function(next) {

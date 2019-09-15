@@ -45,7 +45,8 @@ app.post('/api/signup', (req, res, next) => {
 
     const newUser = new User({
       email: email,
-      password: password
+      password: password,
+      image_filenames: []
     });
 
     newUser.save(err => {
