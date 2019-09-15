@@ -60,7 +60,8 @@ const storage = new GridFsStorage({
         const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
-          bucketName: 'uploads' // bucketname should match mongo collection name
+          bucketName: 'uploads', // bucketname should match mongo collection name
+          metadata: {} // to include any other data from req we want to include about the image
         };
         resolve(fileInfo);
       });
@@ -70,13 +71,16 @@ const storage = new GridFsStorage({
 
 const upload = multer({ 
   storage: storage,
-  fileFilter: (req, file, cb) => { // Makes sure only images upload to the uploads collection
+  fileFilter: (req, file, cb) => { 
+      // This code block maybe used for user authentication when uploading imaged
+    
+      // Makes sure only images upload to the uploads collection
       const ifValidFile = ['.png', '.jpg', '.jpeg'].some(ext => ext == path.extname(file.originalname));
       
       if(ifValidFile) {
-          return cb(null, true);
+          return cb(null, true); // This means the image will upload
       } else {
-          return cb(null, false);
+          return cb(null, false); // This means the image won't upload
       }
     }
 });
