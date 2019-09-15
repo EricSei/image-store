@@ -1,5 +1,5 @@
-## Image Store Web App
-    ** Image uploader App that is built by CTP team members
+## image-store
+    ** Image uploader App that is build by CTP team members
 # Authors
 
 # How To Run
@@ -12,6 +12,17 @@
 
    `npm install`
 
-3.  Create .env file in the root directory to store environment variable:
+3.  Create an .env file in the root directory to store environment variable:
 
    `JWT_SECRET=TYPEANYTHINGHERE`
+
+4. Run the backend.
+
+   `node index.js`
+
+5. Run the frontend.
+
+   `cd client`
+
+   `npm start`
+
