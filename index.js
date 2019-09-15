@@ -31,7 +31,8 @@ app.use(methodOverride('_method'));
 // -----------------------------------------------------------------------------------------
 // MongoDB Setup
 // -----------------------------------------------------------------------------------------
-mongoose.connect('mongodb://localhost:27017/imagestore', { useNewUrlParser: true, useUnifiedTopology: true });
+const mongoURI = 'mongodb://localhost:27017/imagestore';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const conn = mongoose.connection;
 
 // -----------------------------------------------------------------------------------------
