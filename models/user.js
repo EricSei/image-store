@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   image_fileIDs: [mongoose.SchemaTypes.ObjectId]
 });
 
+// Hash password with bcrypt library before storing the User into DB.
 userSchema.pre('save', function(next) {
   const user = this;
 
@@ -21,6 +22,15 @@ userSchema.pre('save', function(next) {
     });
   });
 });
+
+// Method to validate incoming password with currently hashed password.
+userSchema.methods.comparePassword = function(candidatePassword, callback) {
+  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+    if (err) { return callback(err); }
+
+    callback(null, isMatch);
+  });
+}
 
 const User = mongoose.model('User', userSchema);
 
