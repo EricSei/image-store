@@ -19,13 +19,7 @@
 
    `JWT_SECRET=TYPEANYTHINGHERE`
 
-4. Run the backend.
+4. Run the both frontend and backend.
 
-   `node index.js`
-
-5. Run the frontend.
-
-   `cd client`
-
-   `npm start`
+    `npm run dev`
 
