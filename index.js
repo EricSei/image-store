@@ -100,7 +100,7 @@ const upload = multer({
 // -----------------------------------------------------------------------------------------
 // Authentication API
 // -----------------------------------------------------------------------------------------
-app.get('/api', (req, res, next) => {
+app.get('/api', requireAuth, (req, res, next) => {
   res.send('Welcome to the Imagestore API.');
 });
 
