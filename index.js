@@ -38,7 +38,7 @@ const requireSignin = passport.authenticate('local', { session: false });
 // -----------------------------------------------------------------------------------------
 // MongoDB Setup
 // -----------------------------------------------------------------------------------------
-const mongoURI = 'mongodb://localhost:27017/imagestore';
+const mongoURI = 'mongodb+srv://imagicat:123@image-store-iz5hu.mongodb.net/test?retryWrites=true&w=majority';
 const promise = mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
