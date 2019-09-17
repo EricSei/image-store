@@ -21,14 +21,15 @@ const LocalStrategy   = require('passport-local');
 // -----------------------------------------------------------------------------------------
 // Internal Dependencies
 // -----------------------------------------------------------------------------------------
-const User = require('./models/user');
+const User  = require('./models/user');
+const Image = require('./models/image');
 require('dotenv/config');
 const keys = require('./config/keys');
 
 // -----------------------------------------------------------------------------------------
 // Middlewares
 // -----------------------------------------------------------------------------------------
-app.use(bodyParser.json({ type: '*/*' }));
+app.use(bodyParser.json());
 app.use(cors());
 app.use(methodOverride('_method'));
 
@@ -99,7 +100,6 @@ const upload = multer({
 // -----------------------------------------------------------------------------------------
 // Authentication API
 // -----------------------------------------------------------------------------------------
-
 app.get('/api', (req, res, next) => {
   res.send('Welcome to the Imagestore API.');
 });
@@ -129,6 +129,25 @@ app.post('/api/signup', (req, res, next) => {
 
 app.post('/api/signin', requireSignin, (req, res, next) => {
   res.send({ token: tokenForUser(req.user) });
+});
+
+// -----------------------------------------------------------------------------------------
+// Upload API
+// -----------------------------------------------------------------------------------------
+app.post('/api/upload', upload.array('file'), (req, res) => {
+  req.files.forEach(file => {
+    const fileId = file.id;
+
+    const newImage = new Image({
+      fileId: fileId
+    });
+
+    newImage.save(err => {
+      if (err) return next(err);
+    });
+  });
+
+  res.send({ fileCount: req.files.length });
 });
 
 // -----------------------------------------------------------------------------------------
