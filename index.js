@@ -72,8 +72,7 @@ const storage = new GridFsStorage({
         const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
-          bucketName: 'uploads', // bucketname should match mongo collection name
-          metadata: {} // to include any other data from req we want to include about the image
+          bucketName: 'uploads' // bucketname should match mongo collection name        
         };
         resolve(fileInfo);
       });
@@ -84,8 +83,7 @@ const storage = new GridFsStorage({
 const upload = multer({ 
   storage: storage,
   fileFilter: (req, file, cb) => { 
-      // This code block maybe used for user authentication when uploading imaged
-    
+
       // Makes sure only images upload to the uploads collection
       const ifValidFile = ['.png', '.jpg', '.jpeg'].some(ext => ext == path.extname(file.originalname));
       
@@ -134,12 +132,17 @@ app.post('/api/signin', requireSignin, (req, res, next) => {
 // -----------------------------------------------------------------------------------------
 // Upload API
 // -----------------------------------------------------------------------------------------
-app.post('/api/upload', upload.array('file'), (req, res) => {
+app.post('/api/upload', /*requireAuth,*/ upload.array('file'), (req, res) => {
   req.files.forEach(file => {
-    const fileId = file.id;
+    const fileID = file.id;
+    const userId = req.user? req.user._id : null;
 
     const newImage = new Image({
-      fileId: fileId
+      fileID: fileID,
+      uploadDate: Date.now(),
+      filename: file.filename,
+      title: req.body.title,
+      creator: userId
     });
 
     newImage.save(err => {
