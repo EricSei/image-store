@@ -4,11 +4,16 @@
 const mongoose = require('mongoose');
 
 // -----------------------------------------------------------------------------------------
+// Internal Dependencies
+// -----------------------------------------------------------------------------------------
+const keys = require('../config/keys');
+
+// -----------------------------------------------------------------------------------------
 // MongoDB Connection
 // -----------------------------------------------------------------------------------------
 let mongoDB = {};
 
-mongoDB.mongoURI = 'mongodb+srv://imagicat:123@image-store-iz5hu.mongodb.net/test?retryWrites=true&w=majority';
+mongoDB.mongoURI = keys.mongoURI;
 mongoDB.promise = mongoose.connect(mongoDB.mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
