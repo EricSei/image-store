@@ -1,5 +1,8 @@
-## image-store
-    ** Image uploader App that is build by CTP team members
+
+## Image Store Web App
+    ** Image uploader App that is built by CTP team members
+
+
 # Authors
 
 # How To Run
@@ -16,13 +19,7 @@
 
    `JWT_SECRET=TYPEANYTHINGHERE`
 
-4. Run the backend.
+4. Run the both frontend and backend.
 
-   `node index.js`
-
-5. Run the frontend.
-
-   `cd client`
-
-   `npm start`
+    `npm run dev`
 
