@@ -12,7 +12,7 @@ const mongoose        = require('mongoose');
 // -----------------------------------------------------------------------------------------
 // Internal Dependencies
 // -----------------------------------------------------------------------------------------
-require('dotenv/config');
+if(process.env.NODE_ENV !== 'production') require('dotenv/config');
 const authRouter   = require('./routes/authentication');
 const uploadRouter = require('./routes/upload');
 const mongoDB      = require('./services/mongoDB');
