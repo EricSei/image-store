@@ -8,6 +8,7 @@ const cors            = require('cors');
 const Grid            = require('gridfs-stream');
 const methodOverride  = require('method-override');
 const mongoose        = require('mongoose');
+const http            = require('http');
 
 // -----------------------------------------------------------------------------------------
 // Internal Dependencies
@@ -55,6 +56,10 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
+
+setInterval(function() {
+  http.get("https://ctp-image-store.herokuapp.com/");
+}, 300000); // every 5 minutes (300000)
 
 // -----------------------------------------------------------------------------------------
 // Port Setup
