@@ -12,7 +12,7 @@ const mongoose        = require('mongoose');
 // -----------------------------------------------------------------------------------------
 // Internal Dependencies
 // -----------------------------------------------------------------------------------------
-require('dotenv/config');
+if(process.env.NODE_ENV !== 'production') require('dotenv/config');
 const authRouter   = require('./routes/authentication');
 const uploadRouter = require('./routes/upload');
 const mongoDB      = require('./services/mongoDB');
@@ -40,6 +40,21 @@ mongoDB.conn.once('open', () => {
 // -----------------------------------------------------------------------------------------
 authRouter(app);
 uploadRouter(app);
+
+// -----------------------------------------------------------------------------------------
+// Heroku Setup
+// -----------------------------------------------------------------------------------------
+if (process.env.NODE_ENV === 'production') {
+  // Express will serve up production assets. (e.g. main.js, or main.css)
+  app.use(express.static('client/build'));
+
+  // Express will serve up the index.html if it doesn't recognize the route.
+  const path = require('path');
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 // -----------------------------------------------------------------------------------------
 // Port Setup
