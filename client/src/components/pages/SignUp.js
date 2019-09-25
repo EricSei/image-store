@@ -27,7 +27,7 @@ const SignUp = props => {
   return (
     <div className='form-container'>
       <h1>
-        <span className='text-success'> Account Sing Up </span>
+        <span className='text-success'> Account Sign Up </span>
       </h1>
       <form onSubmit={onSubmit}>
         <div className='form-group'>
@@ -48,6 +48,7 @@ const SignUp = props => {
             value={email}
             onChange={onChange}
             required
+            autoComplete={false}
           ></input>
         </div>
 
