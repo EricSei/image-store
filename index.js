@@ -56,6 +56,11 @@ conn.once('open', () => {
 authRouter(app);
 uploadRouter(app);
 
+// For debugging purposes.
+app.get('/api/display', (req, res) => {
+  res.send({ msg: 'This is the display route!'});
+});
+
 // -----------------------------------------------------------------------------------------
 // Heroku Setup
 // -----------------------------------------------------------------------------------------
