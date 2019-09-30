@@ -10,7 +10,7 @@ function Navbar({ title, icon, token, setToken }) {
   // ------------------------------------------------------------------------
   const signOut = () => {
     setToken(null);
-
+    localStorage.removeItem('token');
     history.push('/');
   }
 
@@ -20,9 +20,14 @@ function Navbar({ title, icon, token, setToken }) {
   const renderButtons = () => {
     return token
       ? (
-        <li>
-          <Link to="#" onClick={signOut}>Sign Out</Link>
-        </li>
+        <React.Fragment>
+          <li>
+            <Link to="upload">Upload</Link>
+          </li>
+          <li>
+            <Link to="#" onClick={signOut}>Sign Out</Link>
+          </li>
+        </React.Fragment>
       )
       : (
         <React.Fragment>
@@ -51,9 +56,6 @@ function Navbar({ title, icon, token, setToken }) {
 				<li>
 					<Link to="/about">About</Link>
 				</li>
-        <li>
-          <Link to="upload">Upload</Link>
-        </li>
 				{renderButtons()}
 			</ul>
 		</div>

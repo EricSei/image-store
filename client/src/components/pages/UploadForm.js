@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import history from '../../history';
 
-const UploadForm = () => {
+const UploadForm = props => {
   // ------------------------------------------------------------------------
   // States
   // ------------------------------------------------------------------------
@@ -20,7 +20,10 @@ const UploadForm = () => {
     
     await fetch('/api/upload', {
       method: 'POST',
-      body: formData
+      body: formData,
+      headers: {
+        Authorization: props.token
+      }
     });
 
     history.push('/');

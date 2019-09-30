@@ -34,8 +34,9 @@ const SignIn = props => {
       if (data.token) {
         setError('');
         props.setToken(data.token);
+        localStorage.setItem('token', data.token);
       }
-  
+      
       history.push('/upload');
     } catch (error) {
       setError('Invalid Credentials');

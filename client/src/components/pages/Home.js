@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { PromiseProvider } from 'mongoose';
 
 const Home = () => {
   // ------------------------------------------------------------------------
@@ -15,7 +16,7 @@ const Home = () => {
 
   const fetchImages = async () => {
     try {
-      const response = await fetch('/api/images');
+      const response = await fetch('/api/display/fetchall');
       const images   = await response.json();
       
       setImages(images);
@@ -36,10 +37,13 @@ const Home = () => {
           {
             images.map(image => {
               return (
-                <img 
-                  key={image.filename} 
-                  src={`/api/display/filestream/${image.filename}`}
-                />
+                <div>
+                  <img 
+                    key={image.filename} 
+                    src={`/api/display/filestream/${image.filename}`}
+                  />
+                  Creator: { image.creator? image.creator : 'null' }
+                </div>
               )
             })
           }

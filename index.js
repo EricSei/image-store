@@ -17,7 +17,6 @@ if(process.env.NODE_ENV !== 'production') require('dotenv/config');
 const authRouter   = require('./routes/authentication');
 const uploadRouter = require('./routes/upload');
 const displayRouter = require('./routes/display')
-// const mongoDB      = require('./services/mongoDB');
 const keys         = require('./config/keys');
 
 // -----------------------------------------------------------------------------------------
@@ -48,7 +47,6 @@ conn.once('open', () => {
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('uploads');
     displayRouter(app, gfs);
-    console.log('connected'); 
 });
 
 // -----------------------------------------------------------------------------------------
@@ -56,26 +54,6 @@ conn.once('open', () => {
 // -----------------------------------------------------------------------------------------
 authRouter(app);
 uploadRouter(app);
-
-app.get('/api/images', (req, res) => {
-  gfs.files.find({}).toArray((err, images) => {
-    if (err) return res.json([]);
-    return res.json(images);
-  });
-});
-
-app.get('/api/image/:filename', (req, res) => {
-  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-    if (!file || !file.length) return res.status(404).json({ error: 'No image to serve!'});
-    
-    if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-      const readstream = gfs.createReadStream({ filename: file.filename });
-      readstream.pipe(res);
-    } else {
-      res.status(404).json({ error: 'Not an image!' });
-    }
-  });
-});
 
 // -----------------------------------------------------------------------------------------
 // Heroku Setup

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Home from './components/pages/Home';
@@ -12,6 +12,10 @@ import history from './history';
 
 const App = props => {
   const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    setToken(localStorage.getItem('token'));
+  }, []);
 
   return (
     <Router history={history}>
@@ -30,7 +34,11 @@ const App = props => {
               render={() => <SignUp {...props} setToken={setToken} />}
               exact 
             />
-            <Route exact path='/upload' component={UploadForm} />
+            <Route 
+              exact 
+              path='/upload' 
+              render={() => <UploadForm {...props} token={token} />} 
+            />
           </Switch>
         </div>
       </Fragment>
