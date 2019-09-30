@@ -16,6 +16,7 @@ const https           = require('https');
 if(process.env.NODE_ENV !== 'production') require('dotenv/config');
 const authRouter   = require('./routes/authentication');
 const uploadRouter = require('./routes/upload');
+const displayRouter = require('./routes/display')
 const mongoDB      = require('./services/mongoDB');
 
 // -----------------------------------------------------------------------------------------
@@ -28,12 +29,14 @@ app.use(methodOverride('_method'));
 // -----------------------------------------------------------------------------------------
 // Initialize gfs (grid fs stream)
 // -----------------------------------------------------------------------------------------
-let gfs;
+let gfs = {};
 
 mongoDB.conn.once('open', () => {
     // Init stream
     gfs = Grid(mongoDB.conn.db, mongoose.mongo);
     gfs.collection('uploads');
+    displayRouter(app, gfs);
+    console.log('connected'); 
 });
 
 // -----------------------------------------------------------------------------------------
