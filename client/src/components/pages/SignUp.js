@@ -37,13 +37,14 @@ const SignUp = props => {
     if (data.token) {
       setError(null);
       props.setToken(data.token);
+      localStorage.setItem('token', data.token);
     }
     
     if (data.error) {
       setError(data.error);
       return;
     }
-
+    
     history.push('/upload');
   };
 

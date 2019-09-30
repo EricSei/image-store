@@ -14,11 +14,11 @@ const https           = require('https');
 // Internal Dependencies
 // -----------------------------------------------------------------------------------------
 if(process.env.NODE_ENV !== 'production') require('dotenv/config');
-const authRouter   = require('./routes/authentication');
-const uploadRouter = require('./routes/upload');
+const authRouter    = require('./routes/authentication');
+const uploadRouter  = require('./routes/upload');
 const displayRouter = require('./routes/display')
-// const mongoDB      = require('./services/mongoDB');
-const keys         = require('./config/keys');
+const keys          = require('./config/keys');
+const Image         = require('./models/image');
 
 // -----------------------------------------------------------------------------------------
 // Middlewares
@@ -47,8 +47,8 @@ conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('uploads');
-    displayRouter(app, gfs);
-    console.log('connected'); 
+    // Display Route Handlers.
+    // displayRouter(app, gfs);
 });
 
 // -----------------------------------------------------------------------------------------
@@ -57,24 +57,36 @@ conn.once('open', () => {
 authRouter(app);
 uploadRouter(app);
 
-app.get('/api/images', (req, res) => {
-  gfs.files.find({}).toArray((err, images) => {
-    if (err) return res.json([]);
-    return res.json(images);
-  });
+// For debugging purposes.
+app.get('/api/display', (req, res) => {
+  res.send({ msg: 'This is the display route!'});
 });
 
-app.get('/api/image/:filename', (req, res) => {
-  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-    if (!file || !file.length) return res.status(404).json({ error: 'No image to serve!'});
-    
-    if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-      const readstream = gfs.createReadStream({ filename: file.filename });
+//This will send all images' info
+app.get('/api/display/fetchall', (req, res) => {
+  Image.find()
+  .then(imgs => {
+      res.json(imgs)
+  })
+  .catch(err => res.json({err: err}));
+});
+
+//This will send image stream
+app.get('/api/display/filestream/:filename', (req, res) => {
+  gfs.files.findOne({filename: req.params.filename}, (err, file) => {
+      if(err) {
+          return res.status(404).json({err});
+      }
+      // Check if file
+      if(!file || file.length == 0) {
+          return res.status(404).json({
+              err: 'No file exists'
+          });
+      };
+      res.contentType =  file.contentType;
+      const readstream = gfs.createReadStream(file.filename);
       readstream.pipe(res);
-    } else {
-      res.status(404).json({ error: 'Not an image!' });
-    }
-  });
+  });    
 });
 
 // -----------------------------------------------------------------------------------------

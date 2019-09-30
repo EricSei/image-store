@@ -3,19 +3,17 @@
 // -----------------------------------------------------------------------------------------
 const middlewares = require('../middlewares');
 const Image       = require('../models/image');
-const mongoDB     = require('../services/mongoDB')
 
 //----------------------------------------------------------------
 // Display API
 //----------------------------------------------------------------
 
 module.exports = function(app, gfs) {
-
-    //This will send image info
-    app.get('/api/display', (req, res) => {
+    //This will send all images' info
+    app.get('/api/display/fetchall', (req, res) => {
         Image.find()
         .then(imgs => {
-            res.json({images: imgs})
+            res.json(imgs)
         })
         .catch(err => res.json({err: err}));
     });
