@@ -16,7 +16,7 @@ const App = props => {
   return (
     <Router history={history}>
       <Fragment className='App'>
-        <Navbar />
+        <Navbar token={token} setToken={setToken} />
         <div className='container'>
           <Switch>
             <Route exact path='/' component={Home} />

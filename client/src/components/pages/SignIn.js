@@ -22,26 +22,32 @@ const SignIn = props => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    const response = await fetch('/api/signin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(user)
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      setError('Invalid Credentials.');
-      return;
+    try {
+      const response = await fetch('/api/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+      });
+  
+      const data = await response.json();
+  
+      if (data.token) {
+        setError('');
+        props.setToken(data.token);
+      }
+  
+      history.push('/upload');
+    } catch (error) {
+      setError('Invalid Credentials');
     }
-
-    if (data.token) {
-      setError('');
-      props.setToken(data.token);
-    }
-
-    history.push('/');
   };
+
+  // ------------------------------------------------------------------------
+  // Conditional Renders
+  // ------------------------------------------------------------------------   
+  const renderError = () => {
+    return error? <div>{error}</div> : null;
+  }
 
   // ------------------------------------------------------------------------
   // Render
@@ -49,6 +55,7 @@ const SignIn = props => {
   return (
     <div className='form-container'>
       <h1>Account Sign In </h1>
+      {renderError()}
       <form onSubmit={onSubmit}>
         <div className='form-group'>
           <label htmlFor='name'>Email</label>
