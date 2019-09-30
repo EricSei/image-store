@@ -38,7 +38,7 @@ const Home = () => {
               return (
                 <img 
                   key={image.filename} 
-                  src={`/api/image/${image.filename}`}
+                  src={`/api/display/filestream/${image.filename}`}
                 />
               )
             })

@@ -21,7 +21,7 @@ module.exports = function(app, gfs) {
     });
 
     //This will send image stream
-    app.get('/api/filestream/:filename', (req, res) => {
+    app.get('/api/display/filestream/:filename', (req, res) => {
         gfs.files.findOne({filename: req.params.filename}, (err, file) => {
             if(err) {
                 return res.status(404).json({err});
