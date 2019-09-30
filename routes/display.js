@@ -9,6 +9,10 @@ const Image       = require('../models/image');
 //----------------------------------------------------------------
 
 module.exports = function(app, gfs) {
+    // For debugging purposes.
+    app.get('/api/display', (req, res) => {
+      res.send({ msg: 'This is the display route!'});
+    });
 
     //This will send all images' info
     app.get('/api/display/fetchall', (req, res) => {

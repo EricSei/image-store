@@ -46,6 +46,7 @@ conn.once('open', () => {
     // Init stream
     gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection('uploads');
+    // Display Route Handlers.
     displayRouter(app, gfs);
 });
 
