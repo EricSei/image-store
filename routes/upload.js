@@ -12,7 +12,7 @@ module.exports = function(app) {
     req.files.forEach(file => {
       const fileID = file.id;
       const userId = req.user? req.user._id : null;
-  
+      console.log(req.user);
       const newImage = new Image({
         fileID: fileID,
         uploadDate: Date.now(),
