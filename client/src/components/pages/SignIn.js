@@ -1,25 +1,51 @@
 import React, { useState } from 'react';
 
-const SignIn = () => {
+import history from '../../history';
+
+const SignIn = props => {
+  // ------------------------------------------------------------------------
+  // States
+  // ------------------------------------------------------------------------  
   const [user, setUser] = useState({
     email: '',
     password: ''
   });
   const { email, password } = user;
+  const [error, setError] = useState(null);
+
+  // ------------------------------------------------------------------------
+  // Form Handlers
+  // ------------------------------------------------------------------------  
   const onChange = event => {
     setUser({ ...user, [event.target.name]: event.target.value });
   };
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
-    if (email === '' || password === '') {
-      alert('Please enter all field', 'danger');
-    } else {
-      // Sign In API
-      alert('Sign In !!');
+    const response = await fetch('/api/signin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user)
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      setError('Invalid Credentials.');
+      return;
     }
+
+    if (data.token) {
+      setError('');
+      props.setToken(data.token);
+    }
+
+    history.push('/');
   };
 
+  // ------------------------------------------------------------------------
+  // Render
+  // ------------------------------------------------------------------------ 
   return (
     <div className='form-container'>
       <h1>Account Sign In </h1>
@@ -29,7 +55,6 @@ const SignIn = () => {
           <input
             type='email'
             name='email'
-            value={email}
             required
             onChange={onChange}
           ></input>
@@ -39,7 +64,7 @@ const SignIn = () => {
           <input
             type='password'
             name='password'
-            value={password}
+            onChange={onChange}
             required
           ></input>
         </div>

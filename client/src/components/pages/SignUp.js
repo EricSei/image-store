@@ -3,6 +3,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import history from '../../history';
 
 const SignUp = props => {
+  // ------------------------------------------------------------------------
+  // States
+  // ------------------------------------------------------------------------
   const [user, setUser] = useState({
     name: '',
     email: '',
@@ -14,18 +17,13 @@ const SignUp = props => {
 
   const [error, setError] = useState(null);
 
+  // ------------------------------------------------------------------------
+  // Form Handlers
+  // ------------------------------------------------------------------------  
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
 
   const onSubmit = async e => {
     e.preventDefault();
-    // if (name === '' || email === '' || password === '') {
-    //   alert('Please enter all field', 'danger');
-    // } else if (password !== password2) {
-    //   alert('Passwords do not match', 'danger');
-    // } else {
-    //   // Sign Up API
-    //   alert('Sign Up !!');
-    // }
     const response = await fetch('/api/signup', {
       method: 'POST',
       headers: {
@@ -36,7 +34,10 @@ const SignUp = props => {
 
     const data = await response.json();
 
-    if (data.token) props.setToken(data.token);
+    if (data.token) {
+      setError(null);
+      props.setToken(data.token);
+    }
     
     if (data.error) {
       setError(data.error);
@@ -50,10 +51,16 @@ const SignUp = props => {
     password === password2? setError(null) : setError('Password does not match!');
   }
 
+  // ------------------------------------------------------------------------
+  // Conditional Renders
+  // ------------------------------------------------------------------------ 
   const renderError = () => {
     return error? <div>{error}</div> : null;
   }
 
+  // ------------------------------------------------------------------------
+  // Render
+  // ------------------------------------------------------------------------
   return (
     <div className='form-container'>
       <h1>

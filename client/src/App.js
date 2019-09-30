@@ -21,7 +21,10 @@ const App = props => {
           <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path='/about' component={About} />
-            <Route exact path='/signin' component={SignIn} />
+            <Route 
+              exact 
+              path='/signin' 
+              render={() => <SignIn {...props} setToken={setToken} />} />
             <Route 
               path='/signup' 
               render={() => <SignUp {...props} setToken={setToken} />}
