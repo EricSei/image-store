@@ -23,7 +23,11 @@ const App = props => {
         <Navbar token={token} setToken={setToken} />
         <div className='container'>
           <Switch>
-            <Route exact path='/' component={Home} />
+            <Route 
+              exact 
+              path='/' 
+              render={() => <Home {...props} token={token} />} 
+            />
             <Route exact path='/about' component={About} />
             <Route 
               exact 
