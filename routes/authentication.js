@@ -54,4 +54,8 @@ module.exports = function(app) {
   app.post('/api/signin', middlewares.requireLogin, (req, res, next) => {
     res.send({ token: tokenForUser(req.user) });
   });
+
+  app.get('/api/userid', middlewares.requireToken, (req, res) => {
+    res.send({ userId: req.user._id });
+  });
 }
