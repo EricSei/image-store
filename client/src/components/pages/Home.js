@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { PromiseProvider } from 'mongoose';
 
-const Home = () => {
+const Home = props => {
   // ------------------------------------------------------------------------
   // States
   // ------------------------------------------------------------------------  
   const [images, setImages] = useState([]);
+  const [userId, setUserId] = useState(null);
 
   // ------------------------------------------------------------------------
   // Lifecycles
@@ -13,7 +14,7 @@ const Home = () => {
   useEffect(() => {
     fetchImages();
   }, []);
-
+  
   const fetchImages = async () => {
     try {
       const response = await fetch('/api/display/fetchall');
@@ -24,6 +25,25 @@ const Home = () => {
       setImages([]);
     }
   }
+
+  const fetchUserId = async token => {
+    try {
+      const response = await fetch('/api/userid', {
+        headers: {
+          Authorization: token
+        }
+      });
+  
+      const data = await response.json();
+  
+      setUserId(data.userId);
+    } catch (error) {
+      setUserId(null);
+    }
+
+  }
+
+  fetchUserId(props.token);
 
   // ------------------------------------------------------------------------
   // Conditional Renders
@@ -47,8 +67,10 @@ const Home = () => {
                     <h4 className="font-weight-bold d-inline-block">
                       Creator: { image.creator? image.creator : 'null' }
                     </h4>  
+                    {renderDeleteButton(image.creator)}
                   </div>
                                 
+
                 </div>
               )
             })
@@ -57,6 +79,10 @@ const Home = () => {
         </div>
       );
     }
+  }
+
+  const renderDeleteButton = creatorId => {
+    return userId && userId === creatorId? <button>Delete</button> : null;
   }
 
   // ------------------------------------------------------------------------
