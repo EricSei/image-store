@@ -19,6 +19,7 @@ const uploadRouter  = require('./routes/upload');
 const displayRouter = require('./routes/display')
 const keys          = require('./config/keys');
 const Image         = require('./models/image');
+const Middlewares   = require('./middlewares/index');
 
 // -----------------------------------------------------------------------------------------
 // Middlewares
@@ -56,11 +57,7 @@ conn.once('open', () => {
 // -----------------------------------------------------------------------------------------
 authRouter(app);
 uploadRouter(app);
-
-// For debugging purposes.
-app.get('/api/display', (req, res) => {
-  res.send({ msg: 'This is the display route!'});
-});
+displayRouter(app);
 
 //This will send all images' info
 app.get('/api/display/fetchall', (req, res) => {
@@ -68,7 +65,7 @@ app.get('/api/display/fetchall', (req, res) => {
   .then(imgs => {
       res.json(imgs)
   })
-  .catch(err => res.json({err: err}));
+  .catch(err => res.json({err: err.toString()}));
 });
 
 //This will send image stream
@@ -87,6 +84,26 @@ app.get('/api/display/filestream/:filename', (req, res) => {
       const readstream = gfs.createReadStream(file.filename);
       readstream.pipe(res);
   });    
+});
+
+// deletion api
+// the parameter needs to be a filename
+// REQUIRE TOKEN IS COMMENTED OUT FOR TESTING
+app.delete('/api/delete/:filename', /*middlewares.requireToken,*/ (req, res) => {
+
+  Image.findOne({filename: req.params.filename})
+  .then(image => {
+    return Image.findByIdAndDelete(image._id)
+  })
+  .then( image => {
+    return gfs.remove({_id: image.fileID, root: 'uploads'/*collection in db*/});
+  })
+  .then( gridStore => {
+    res.json({message: "deletion sucessful"});
+  })
+  .catch(err => {
+    res.status(404).json({error: err.toString() });
+  });
 });
 
 // -----------------------------------------------------------------------------------------
