@@ -89,7 +89,7 @@ app.get('/api/display/filestream/:filename', (req, res) => {
 // deletion api
 // the parameter needs to be a filename
 // REQUIRE TOKEN IS COMMENTED OUT FOR TESTING
-app.delete('/api/delete/:filename', /*middlewares.requireToken,*/ (req, res) => {
+app.delete('/api/delete/:filename', middlewares.requireToken, (req, res) => {
 
   Image.findOne({filename: req.params.filename})
   .then(image => {
