@@ -45,6 +45,16 @@ const Home = props => {
 
   fetchUserId(props.token);
 
+  //-------------------------------------------------------------------------
+  // Delete image
+  // ------------------------------------------------------------------------
+
+  const deleteHandler = async (e, filename) => {
+    const response = await fetch(`/api/delete/${filename}`);
+    const delImg = await response.json();
+    setImages( images.filter( image => delImg.image.filename != image.filename ) );
+  }
+
   // ------------------------------------------------------------------------
   // Conditional Renders
   // ------------------------------------------------------------------------
@@ -67,7 +77,7 @@ const Home = props => {
                     <h4 className="font-weight-bold d-inline-block">
                       Creator: { image.creator? image.creator : 'null' }
                     </h4>  
-                    {renderDeleteButton(image.creator)}
+                    {renderDeleteButton(image.creator, image.filename)}
                   </div>
                                 
 
@@ -81,8 +91,10 @@ const Home = props => {
     }
   }
 
-  const renderDeleteButton = creatorId => {
-    return userId && userId === creatorId? <button>Delete</button> : null;
+  const renderDeleteButton = (creatorId, filename) => {
+    return userId && userId === creatorId? 
+      <button onClick = { e => deleteHandler(e, filename) }>Delete</button> 
+      : null;
   }
 
   // ------------------------------------------------------------------------
