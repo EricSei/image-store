@@ -50,7 +50,8 @@ const Home = props => {
   // ------------------------------------------------------------------------
 
   const deleteHandler = async (e, filename) => {
-    const response = await fetch(`/api/delete/${filename}?_method=DELETE`, {method: 'POST'});
+    const response = await fetch(`/api/delete/${filename}?_method=DELETE`, 
+      {method: 'POST', headers: { Authorization: props.token } });
     const delImg = await response.json();
     setImages( images.filter( image => delImg.image.filename != image.filename ) );
   }
