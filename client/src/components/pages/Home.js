@@ -94,7 +94,7 @@ const Home = props => {
 
   const renderDeleteButton = (creatorId, filename) => {
     return userId && userId === creatorId? 
-      <button onClick = { e => deleteHandler(e, filename) }>Delete</button> 
+      <button className="btn btn-danger" onClick = { e => deleteHandler(e, filename) }>Delete</button> 
       : null;
   }
 
