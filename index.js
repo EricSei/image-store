@@ -89,17 +89,19 @@ app.get('/api/display/filestream/:filename', (req, res) => {
 // deletion api
 // the parameter needs to be a filename
 // REQUIRE TOKEN IS COMMENTED OUT FOR TESTING
-app.delete('/api/delete/:filename', /*middlewares.requireToken,*/ (req, res) => {
+app.delete('/api/delete/:filename', Middlewares.requireToken, (req, res) => {
+  let img;
 
   Image.findOne({filename: req.params.filename})
   .then(image => {
-    return Image.findByIdAndDelete(image._id)
+    img = image;
+    return Image.findByIdAndDelete(image._id);
   })
   .then( image => {
     return gfs.remove({_id: image.fileID, root: 'uploads'/*collection in db*/});
   })
   .then( gridStore => {
-    res.json({message: "deletion sucessful"});
+    res.json({message: "deletion sucessful", image: img});
   })
   .catch(err => {
     res.status(404).json({error: err.toString() });
